@@ -13,7 +13,7 @@ export type IUser = {
   img : string
 }
 
-export default function Mainpage({}: Props) {
+export default function MainPage({}: Props) {
   const [user, setUser] = useState<IUser>({
     staffId : '',
     img : ''
@@ -31,6 +31,7 @@ export default function Mainpage({}: Props) {
       img : img
     }))
   }
+
   return (
     <div className="MainPage">
       <StepWizard isLazyMount={true}>

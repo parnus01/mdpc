@@ -24,9 +24,9 @@ const Form = styled.form`
 `;
 
 const PreviewImg = styled.img`
-    width: 100%;
     height: auto;
-    max-width: 450px;
+    max-width: 100%;
+    max-height: 60vh;
 `;
 
 const Summary: React.FC<Props> = ({nextStep, user}) => {

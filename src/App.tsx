@@ -5,7 +5,7 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
-import Mainpage from "./pages/MainPage/MainPage";
+import MainPage from "./pages/MainPage/MainPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { useAppStore } from "./state/app";
@@ -22,10 +22,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/">
-            <Mainpage/>
-          </Route>
-          <Route exact path="/main">
-            <h3>tesdst</h3>
+            <MainPage/>
           </Route>
         </Switch>
       </Router>
