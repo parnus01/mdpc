@@ -6,19 +6,18 @@ import {
   Route,
 } from "react-router-dom";
 import MainPage from "./pages/MainPage/MainPage";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { useAppStore } from "./state/app";
 
 const StyleBackdrop = styled(Backdrop)`
     z-index: 10;
     color: #fff;
-`
+`;
+
 function App() {
-  const state = useAppStore()
-  const queryClient = new QueryClient()
+  const state = useAppStore();
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <Router>
         <Switch>
           <Route exact path="/">
@@ -27,9 +26,9 @@ function App() {
         </Switch>
       </Router>
       <StyleBackdrop open={state.loading}>
-        <CircularProgress color="inherit" />
+        <CircularProgress color="inherit"/>
       </StyleBackdrop>
-    </QueryClientProvider>
+    </>
   );
 }
 
