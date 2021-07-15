@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { StepWizardChildProps } from "react-step-wizard";
 import styled from 'styled-components';
 import { Button, Container } from "@material-ui/core";
 import { IUser } from "../MainPage";
 import { useCompare } from "../../../hook/useCompare";
-import { useAppStore } from "../../../state/app";
+import { convertURIToBlob } from "../../../services/utils";
 
 type Props = Partial<StepWizardChildProps> & {
   user: IUser
@@ -19,10 +19,6 @@ const SubmitButton = styled(Button)`
     margin: 2rem 0;
 `;
 
-const Form = styled.form`
-    width: 100%;
-`;
-
 const PreviewImg = styled.img`
     height: auto;
     max-width: 100%;
@@ -30,35 +26,51 @@ const PreviewImg = styled.img`
 `;
 
 const Summary: React.FC<Props> = ({nextStep, user}) => {
-  const state = useAppStore()
   const {compare} = useCompare();
+  const imageFile = useCallback(
+    (input: string) => {
+      return convertURIToBlob(input);
+    },
+    [user.img],
+  );
+
   const submitCompare = () => {
-    state.activeLoading()
     compare.mutate({
-      image: user.img,
+      image: imageFile(user.img),
       staff_id: user.staffId
     });
-    //TODO
-    // - Handle loading state
-    // - Handle success or fail result
   };
-  useEffect(() => {
-    if(!compare.isLoading){
-      state.inactiveLoading()
-    }
-  }, [compare.isLoading])
 
   return (user) ? (
     <Container>
       <SummaryWrapper>
-        <p>รหัสพนักงาน : {user.staffId}</p>
-        <PreviewImg src={user.img} alt=""/>
-        <SubmitButton variant="contained" color="primary" type="button" onClick={submitCompare}>
-          ยืนยัน
-        </SubmitButton>
+        {!compare.isError && !compare.isSuccess &&
+        <>
+          <p>รหัสพนักงาน : {user.staffId}</p>
+          <PreviewImg src={user.img} alt=""/>
+          <SubmitButton variant="contained" color="primary" type="button" onClick={submitCompare}>
+            ยืนยัน
+          </SubmitButton>
+        </>
+        }
+        {/*200 case*/}
+        {compare.data && compare.isSuccess &&
+        <p>
+          Result : {(compare.data.result.check_result) ? 'pass' : 'not pass'} <br/>
+          Description : {compare.data.result.detail}
+        </p>}
+        {/*---------------------------*/}
+
+        {/*Error case*/}
+        {(compare.error instanceof Error) && compare.isError &&
+        <p>
+          Error found <br/>
+          Description : {compare.error.message}
+        </p>}
+        {/*---------------------------*/}
       </SummaryWrapper>
     </Container>
-  ) : <div></div>;
+  ) : <></>;
 };
 
 export default Summary;

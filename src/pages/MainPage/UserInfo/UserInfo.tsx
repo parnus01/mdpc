@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useState, useRef } from 'react';
+import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { StepWizardChildProps } from "react-step-wizard";
 import styled from 'styled-components';
 import { Button, Container, Modal, TextField } from "@material-ui/core";
@@ -59,6 +59,10 @@ const UserInfo: React.FC<Props> = ({nextStep, onNext}) => {
     e.preventDefault();
     setStaffId((staffRef.current as unknown as HTMLInputElement).value);
   };
+  const handleRejectConsent = () => {
+    setIsOpenModal(false)
+    setStaffId('')
+  }
   const handleAcceptConsent = () => {
     acceptConsent.mutate({
       staff_id: staffId
@@ -83,7 +87,7 @@ const UserInfo: React.FC<Props> = ({nextStep, onNext}) => {
     if (acceptConsent.isSuccess) {
       handleNextStep();
     }
-  }, [fetchStaff.isLoading, fetchStaff.data, acceptConsent.isSuccess]);
+  }, [fetchStaff.isLoading, fetchStaff.data, fetchStaff.error, acceptConsent.isSuccess]);
 
   return (
     <Container>
@@ -105,7 +109,7 @@ const UserInfo: React.FC<Props> = ({nextStep, onNext}) => {
             <h4>consent version : {fetchConsent.data.version}</h4>
             <p>{fetchConsent.data.consent}</p>
             <StyleButtonGroup>
-              <Button variant="contained" onClick={() => setIsOpenModal(false)}>
+              <Button variant="contained" onClick={handleRejectConsent}>
                 ไม่ยอมรับ
               </Button>
               <Button variant="contained" color="primary" onClick={handleAcceptConsent}>

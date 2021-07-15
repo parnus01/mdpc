@@ -2,11 +2,11 @@ import React, { useCallback, useRef } from 'react';
 import { StepWizardChildProps } from "react-step-wizard";
 import styled from 'styled-components';
 import Webcam from "react-webcam";
+import faceImg from "../../../assets/images/face.svg";
 
 type Props = Partial<StepWizardChildProps> & {
   onNext: (id: string) => void
 }
-
 
 const CameraContainer = styled.div`
     width: 100%;
@@ -16,7 +16,9 @@ const CameraContainer = styled.div`
 `;
 
 const CameraWrapper = styled.div`
+    position: relative;
     video {
+        max-height: 100vh;
         width: 100%;
         height: auto;
         background-color: black;
@@ -51,6 +53,17 @@ const CaptureButton = styled.div`
     transform: translate(-50%, -50%);
 `;
 
+const StyleFaceWrapper = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    img {
+        width: 55vw;
+        height: auto;
+    }
+`;
+
 const CameraTaker: React.FC<Props> = ({nextStep, onNext}) => {
   const cameraRef = useRef<Webcam>(null);
   const handleCapture = useCallback(() => {
@@ -66,17 +79,19 @@ const CameraTaker: React.FC<Props> = ({nextStep, onNext}) => {
   return (
     <CameraContainer>
       <CameraWrapper>
-        <Webcam mirrored={true} height={'400px'}
+        <Webcam mirrored={true}
                 audio={false}
                 ref={cameraRef}
                 screenshotQuality={1} // set the Quality of camera (0-1)
                 forceScreenshotSourceSize
                 screenshotFormat="image/jpeg"
                 videoConstraints={{
-                  width: 1280,
-                  height: 720,
                   facingMode: "user"
-                }}/>
+                }}>
+        </Webcam>
+        <StyleFaceWrapper>
+          <img src={faceImg} alt=""/>
+        </StyleFaceWrapper>
       </CameraWrapper>
       <CaptureButton onClick={handleCapture}>
         <div className="outer-circle">
