@@ -2,6 +2,7 @@ import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { StepWizardChildProps } from "react-step-wizard";
 import styled from 'styled-components';
 import { Button, Container, Modal, TextField } from "@material-ui/core";
+import Alert from '@material-ui/lab/Alert';
 import { useStaff } from "../../../hook/useStaff";
 import { useConsent } from "../../../hook/useConsent";
 
@@ -60,9 +61,9 @@ const UserInfo: React.FC<Props> = ({nextStep, onNext}) => {
     setStaffId((staffRef.current as unknown as HTMLInputElement).value);
   };
   const handleRejectConsent = () => {
-    setIsOpenModal(false)
-    setStaffId('')
-  }
+    setIsOpenModal(false);
+    setStaffId('');
+  };
   const handleAcceptConsent = () => {
     acceptConsent.mutate({
       staff_id: staffId
@@ -118,6 +119,7 @@ const UserInfo: React.FC<Props> = ({nextStep, onNext}) => {
             </StyleButtonGroup>
           </StyleModalContent>
         </StyleModal>}
+        {fetchStaff.error && <Alert severity="error">ไม่พบรหัสพนักงาน</Alert>}
       </UserInfoWrapper>
     </Container>
   );
