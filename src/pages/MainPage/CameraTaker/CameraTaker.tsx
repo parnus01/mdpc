@@ -59,7 +59,7 @@ const StyleFaceWrapper = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     img {
-        width: 55vw;
+        width: 40vw;
         height: auto;
     }
 `;

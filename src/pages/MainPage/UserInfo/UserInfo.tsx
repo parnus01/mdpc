@@ -59,6 +59,7 @@ const UserInfo: React.FC<Props> = ({nextStep, onNext}) => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     setStaffId((staffRef.current as unknown as HTMLInputElement).value);
+    handleNextStep()
   };
   const handleRejectConsent = () => {
     setIsOpenModal(false);
@@ -77,18 +78,18 @@ const UserInfo: React.FC<Props> = ({nextStep, onNext}) => {
     }
   };
 
-  useEffect(() => {
-    if (fetchStaff.data) {
-      if (!fetchStaff.data.info.consent_version) {
-        setIsOpenModal(true);
-      } else {
-        handleNextStep();
-      }
-    }
-    if (acceptConsent.isSuccess) {
-      handleNextStep();
-    }
-  }, [fetchStaff.isLoading, fetchStaff.data, fetchStaff.error, acceptConsent.isSuccess]);
+  // useEffect(() => {
+  //   if (fetchStaff.data) {
+  //     if (!fetchStaff.data.info.consent_version) {
+  //       setIsOpenModal(true);
+  //     } else {
+  //       handleNextStep();
+  //     }
+  //   }
+  //   if (acceptConsent.isSuccess) {
+  //     handleNextStep();
+  //   }
+  // }, [fetchStaff.isLoading, fetchStaff.data, fetchStaff.error, acceptConsent.isSuccess]);
 
   return (
     <Container>
